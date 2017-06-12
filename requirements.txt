@@ -1,0 +1,6 @@
+googlefinance
+ystockquote
+python-dateutil
+pytz
+requests
+telepot
