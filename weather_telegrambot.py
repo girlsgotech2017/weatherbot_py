@@ -51,12 +51,20 @@ def handle(msg):
 	print "Weather call: %s" % query
 	weatherData = requests.get(query).json()
         bot.sendMessage(uid, text=u"Weather of %s measured from %s in country %s is %s degree celcius" % (location, weatherData['name'], weatherData['sys']['country'], weatherData['main']['temp']-273.15))
+    elif commands[0] == '/FORECAST':
+	if len(commands) == 1:
+		location = "Hong Kong"
+	else:
+		location = "%s" % message.split(' ', 1)[1]
+	query = "http://api.openweathermap.org/data/2.5/forecast?q=%s&APPID=%s&mode=json" % (location, WEATHER_API_KEY)
+	print "Forecast call: %s" % query
+	weatherData = requests.get(query).json()
+	text = u"5 days Forecast of weather of %s:\n" % location
+	for i in range(0, len(weatherData['list']), 8):
+		text+= u"%s\t%s degree celcius\t%s\n" % (weatherData['list'][i]['dt_txt'].split(' ')[0], weatherData['list'][i]['main']['temp']-273.15, weatherData['list'][i]['weather'][0]['description'])
+        bot.sendMessage(uid, text=text)
     elif commands[0] == '/HELP':
-        bot.sendMessage(uid, text=u"Available commands for %s:\n /status /start /weather {location} /help" % os.path.basename(sys.argv[0]))
-    elif commands[0] == '/BOTWHATDOYOUTHINK':
-        bot.sendMessage(uid, text=u"Sure, I am open to suggestions. :)")
-    elif commands[0] == '/TYPHOON_WHEN_WILL_YOU_LEAVE':
-        bot.sendMessage(uid, text=u"Signal no. 8?! Why wait? Go now! lol")
+        bot.sendMessage(uid, text=u"Available commands for %s:\n /status \n/start \n/weather {location} \n/forecast {location} \n/help" % os.path.basename(sys.argv[0]))
     else:
         bot.sendMessage(uid, text=u"Unknown command" )
 ##########################################################################
