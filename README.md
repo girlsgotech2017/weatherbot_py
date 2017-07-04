@@ -1,4 +1,4 @@
-1. Do: sudo pip install -r requirement.txt
+1. Do: sudo pip install -r requirements.txt
 2. Have the weather.ini files with the following content:
 
 [Weather]
